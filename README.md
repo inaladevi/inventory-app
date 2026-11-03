@@ -82,8 +82,6 @@ A web-based electronics inventory application built with Express, EJS, and Postg
    node db/seed.js
    ```
 
-   The seed script requires an internet connection.
-
 ## Run
 
 Start the application:
@@ -91,12 +89,6 @@ Start the application:
 ```bash
 node app.js
 ```
-
-Open [http://localhost:3000](http://localhost:3000).
-
-## Tests
-
-Automated tests are not configured yet. The `npm test` script is currently a placeholder.
 
 ## Main pages
 
