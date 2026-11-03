@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= item.name %> | Electronics Store
+    </title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+    <%- include("partials/navbar") %>
+
+    <a href="/categories/<%= category.id %>" class="back-link">
+        ← Back to <%= category.name %>
+    </a>
+
+    <main class="product-detail">
+        <div class="product-detail-image">
+            <img src="<%= item.image_url %>" alt="<%= item.name %>">
+        </div>
+
+        <div class="product-detail-info">
+            <p class="product-brand">
+                <%= item.brand %>
+            </p>
+
+            <h1>
+                <%= item.name %>
+            </h1>
+
+            <p class="detail-category">
+                <%= category.name %>
+            </p>
+
+            <p class="detail-description">
+                <%= item.description %>
+            </p>
+            <a href="/items/<%= item.id %>/edit" class="edit-button">
+                        Edit Product
+            </a>
+            <a href="/items/<%= item.id %>/delete" class="delete-link">
+                Delete Product
+            </a>
+
+            <p class="detail-price">$<%= item.price %>
+            </p>
+
+            <p class="detail-stock">
+                <% if (item.stock_quantity===0) { %>
+                    <p class="stock-badge out-of-stock">Out of Stock</p>
+            
+                    <% } else if (item.stock_quantity <=5) { %>
+                        <p class="stock-badge low-stock">
+                            Only <%= item.stock_quantity %> left
+                        </p>
+            
+                        <% } else { %>
+                            <p class="stock-badge in-stock">In Stock</p>
+                            <% } %>
+            </p>
+        </div>
+    </main>
+
+</body>
+
+</html>

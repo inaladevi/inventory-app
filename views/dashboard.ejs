@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory Dashboard | Electronics Store</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <%- include("partials/navbar") %>
+
+  <main class="dashboard-page">
+
+    <a href="/" class="back-link">← Back to Store</a>
+
+    <header class="dashboard-hero">
+        <div>
+            <p class="dashboard-eyebrow">NEXUS TECH / MANAGEMENT</p>
+            <h1>Inventory Overview</h1>
+            <p>Monitor your products, stock levels, and inventory performance.</p>
+        </div>
+
+        <a href="/items/new" class="dashboard-add-button">
+            + Add Product
+        </a>
+    </header>
+
+    <section class="stats-grid">
+
+    <article class="stat-card">
+      <p>Total Products</p>
+      <h2><%= stats.total_products %></h2>
+      <span class="stat-caption">Products in your catalogue</span>
+    </article>
+
+    <article class="stat-card">
+      <p>Categories</p>
+      <h2><%= stats.total_categories %></h2>
+      <span class="stat-caption">Active product collections</span>
+    </article>
+
+    <article class="stat-card">
+      <p>Total Units in Stock</p>
+      <h2><%= stats.total_stock %></h2>
+      <span class="stat-caption">Units across all categories</span>
+    </article>
+
+    <article class="stat-card">
+      <p>Inventory Value</p>
+      <h2>$<%= Number(stats.inventory_value).toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }) %></h2>
+      <span class="stat-caption">Current stock value</span>
+    </article>
+
+    <article class="stat-card warning-card">
+      <p>Low Stock Products</p>
+      <h2><%= stats.low_stock_count %></h2>
+      <span class="stat-caption">Products requiring attention</span>
+    </article>
+
+  </section>
+
+  <section class="dashboard-section low-stock-section">
+
+      <div class="section-heading">
+          <div>
+              <p class="section-eyebrow">ATTENTION REQUIRED</p>
+              <h2>Low Stock Alerts</h2>
+              <p>Products that need restocking</p>
+          </div>
+
+          <span class="alert-count">
+              <%= lowStockItems.length %> products
+          </span>
+      </div>
+
+      <% if (lowStockItems.length === 0) { %>
+
+          <div class="dashboard-empty-state">
+              <h3>Inventory looking good!</h3>
+              <p>All products are sufficiently stocked. Nothing needs attention.</p>
+          </div>
+
+      <% } else { %>
+
+          <div class="table-wrapper">
+              <table class="inventory-table">
+                  <thead>
+                      <tr>
+                          <th>Product</th>
+                          <th>Brand</th>
+                          <th>Category</th>
+                          <th>Stock Remaining</th>
+                          <th>Action</th>
+                      </tr>
+                  </thead>
+
+                  <tbody>
+                      <% lowStockItems.forEach(item => { %>
+                          <tr>
+                              <td class="table-product-name">
+                                  <%= item.name %>
+                              </td>
+
+                              <td><%= item.brand || "—" %></td>
+
+                              <td><%= item.category %></td>
+
+                              <td>
+                                  <span class="stock-warning">
+                                      <%= item.stock_quantity %> units
+                                  </span>
+                              </td>
+
+                              <td>
+                                  <a href="/items/<%= item.id %>/edit"
+                                     class="table-action">
+                                      Update Stock →
+                                  </a>
+                              </td>
+                          </tr>
+                      <% }) %>
+                  </tbody>
+              </table>
+          </div>
+
+      <% } %>
+
+  </section>
+
+  <section class="dashboard-section recent-section">
+
+      <div class="section-heading">
+          <div>
+              <p class="section-eyebrow">LATEST INVENTORY</p>
+              <h2>Recently Added</h2>
+              <p>Your latest inventory additions</p>
+          </div>
+      </div>
+
+      <% if (recentItems.length === 0) { %>
+
+          <div class="dashboard-empty-state">
+              <p>No products have been added yet.</p>
+          </div>
+
+      <% } else { %>
+
+          <div class="recent-products">
+
+              <% recentItems.forEach(item => { %>
+
+                  <a href="/items/<%= item.id %>"
+                     class="recent-product-card">
+
+                      <img src="<%= item.image_url %>"
+                           alt="<%= item.name %>">
+
+                      <div class="recent-product-info">
+                          <h3><%= item.name %></h3>
+                          <p><%= item.brand %></p>
+                          <span><%= item.category_name %></span>
+                      </div>
+
+                      <div class="recent-product-price">
+                          $<%= item.price %>
+                      </div>
+
+                  </a>
+
+              <% }) %>
+
+          </div>
+
+      <% } %>
+
+  </section>
+
+  <div class="dashboard-analytics-grid">
+
+      <section class="dashboard-section dashboard-panel">
+
+          <div class="section-heading">
+              <div>
+                  <p class="section-eyebrow">INVENTORY BREAKDOWN</p>
+                  <h2>Inventory by Category</h2>
+                  <p>Product distribution across your store</p>
+              </div>
+          </div>
+
+          <div class="category-inventory-grid">
+
+              <% categoryInventory.forEach(category => { %>
+
+                  <article class="category-inventory-card">
+
+                      <h3><%= category.name %></h3>
+
+                      <div class="category-inventory-stats">
+
+                          <div>
+                              <span>Products</span>
+                              <strong><%= category.product_count %></strong>
+                          </div>
+
+                          <div>
+                              <span>Units in stock</span>
+                              <strong><%= category.total_stock %></strong>
+                          </div>
+
+                          <div>
+                              <span>Inventory value</span>
+                              <strong>
+                                  $<%= Number(category.inventory_value).toFixed(2) %>
+                              </strong>
+                          </div>
+
+                      </div>
+
+                      <a href="/categories/<%= category.id %>"
+                         class="category-inventory-link">
+                          View collection →
+                      </a>
+
+                  </article>
+
+              <% }) %>
+
+          </div>
+
+      </section>
+
+      <section class="dashboard-section dashboard-panel">
+
+          <div class="section-heading">
+              <div>
+                  <p class="section-eyebrow">STOCK ANALYTICS</p>
+                  <h2>Stock Distribution</h2>
+                  <p>How your inventory is distributed across categories</p>
+              </div>
+          </div>
+
+          <div class="chart-container">
+
+              <canvas
+                  id="inventoryChart"
+                  data-names="<%= JSON.stringify(categoryInventory.map(c => c.name)) %>"
+                  data-stock="<%= JSON.stringify(categoryInventory.map(c => Number(c.total_stock))) %>"
+              ></canvas>
+
+          </div>
+
+      </section>
+
+  </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    const ctx = document.getElementById("inventoryChart");
+    
+    const categoryNames = JSON.parse(ctx.dataset.names);
+    const stockQuantities = JSON.parse(ctx.dataset.stock);
+
+    const totalStock = stockQuantities.reduce(
+  (total, quantity) => total + quantity,
+  0
+);
+
+const centerTextPlugin = {
+  id: "centerText",
+
+  beforeDraw(chart) {
+    const { ctx, chartArea } = chart;
+
+    if (!chartArea) return;
+
+    const centerX = (chartArea.left + chartArea.right) / 2;
+    const centerY = (chartArea.top + chartArea.bottom) / 2;
+
+    ctx.save();
+
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    ctx.font = "bold 28px Arial";
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText(totalStock.toLocaleString(), centerX, centerY - 10);
+
+    ctx.font = "12px Arial";
+    ctx.fillStyle = "#94a3b8";
+    ctx.fillText("TOTAL UNITS", centerX, centerY + 18);
+
+    ctx.restore();
+  }
+};
+
+    new Chart(ctx, {
+      type: "doughnut",
+      plugins: [centerTextPlugin],
+      data: {
+        labels: categoryNames,
+        datasets: [{
+          label: "Units in stock",
+          data: stockQuantities,
+
+          backgroundColor: [
+            "#38bdf8", 
+            "#818cf8", 
+            "#a78bfa", 
+            "#2dd4bf"  
+          ],
+
+          borderColor: "#111827",
+          borderWidth: 4,
+          borderRadius: 6,
+          spacing: 2,
+          hoverOffset: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+
+        cutout: "72%",
+        radius: "90%",
+
+        plugins: {
+          legend: {
+            position: "bottom",
+            labels: {
+              color: "#cbd5e1",
+              padding: 20,
+              usePointStyle: true
+            }
+          },
+          tooltip: {
+            backgroundColor: "#1e293b",
+            titleColor: "#ffffff",
+            bodyColor: "#cbd5e1",
+            padding: 12,
+            cornerRadius: 8,
+
+            callbacks: {
+              label(context) {
+                const quantity = context.raw;
+                const total = context.dataset.data.reduce(
+                  (sum, value) => sum + value,
+                  0
+                );
+
+                const percentage = ((quantity / total) * 100).toFixed(1);
+
+                return ` ${quantity} units (${percentage}%)`;
+              }
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

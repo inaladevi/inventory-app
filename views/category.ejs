@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= category.name %> | NEXUS TECH</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+    <%- include("partials/navbar") %>
+
+    <main class="category-page">
+
+        <a href="/" class="back-link">← Back to Home</a>
+
+        <header class="category-hero">
+
+            <div class="category-hero-content">
+                <p class="category-eyebrow">EXPLORE COLLECTION</p>
+
+                <h1><%= category.name %></h1>
+
+                <p class="category-description">
+                    <%= category.description %>
+                </p>
+
+                <p class="category-product-count">
+                    <span><%= items.length %></span>
+                    products on this page
+                </p>
+            </div>
+
+            <div class="category-actions">
+                <a href="/categories/<%= category.id %>/edit"
+                   class="category-edit-button">
+                    Edit Category
+                </a>
+
+                <a href="/categories/<%= category.id %>/delete"
+                   class="category-delete-button">
+                    Delete Category
+                </a>
+            </div>
+
+        </header>
+
+        <section class="catalogue-section">
+
+            <div class="catalogue-toolbar">
+
+                <div class="catalogue-toolbar-heading">
+                    <h2>Explore Products</h2>
+                    <p>Discover the collection</p>
+                </div>
+
+                <form action="/categories/<%= category.id %>"
+                      method="GET"
+                      class="sort-form">
+
+                    <input type="hidden" name="page" value="1">
+
+                    <label for="sort">Sort by</label>
+
+                    <select name="sort" id="sort"
+                            onchange="this.form.submit()">
+                        <option value="name" <%= sortBy === "name" ? "selected" : "" %>>
+                            Name (A–Z)
+                        </option>
+
+                        <option value="price_low" <%= sortBy === "price_low" ? "selected" : "" %>>
+                            Price (Low to High)
+                        </option>
+
+                        <option value="price_high" <%= sortBy === "price_high" ? "selected" : "" %>>
+                            Price (High to Low)
+                        </option>
+
+                        <option value="stock_low" <%= sortBy === "stock_low" ? "selected" : "" %>>
+                            Stock (Lowest First)
+                        </option>
+                    </select>
+
+                    <label for="stock">Stock status</label>
+
+                    <select name="stock" id="stock"
+                            onchange="this.form.submit()">
+                        <option value="all" <%= stockFilter === "all" ? "selected" : "" %>>
+                            All products
+                        </option>
+
+                        <option value="in_stock" <%= stockFilter === "in_stock" ? "selected" : "" %>>
+                            In stock
+                        </option>
+
+                        <option value="low_stock" <%= stockFilter === "low_stock" ? "selected" : "" %>>
+                            Low stock
+                        </option>
+
+                        <option value="out_of_stock" <%= stockFilter === "out_of_stock" ? "selected" : "" %>>
+                            Out of stock
+                        </option>
+                    </select>
+
+                </form>
+            </div>
+
+            <% if (items.length === 0) { %>
+
+                <div class="catalogue-empty-state">
+                    <h2>No products found</h2>
+                    <p>There are no products matching this selection.</p>
+                </div>
+
+            <% } else { %>
+
+                <div class="product-grid">
+
+                    <% items.forEach(item => { %>
+
+                        <a href="/items/<%= item.id %>" class="product-card-link">
+
+                            <article class="product-card">
+
+                                <img src="<%= item.image_url %>"
+                                     alt="<%= item.name %>">
+
+                                <div class="product-info">
+
+                                    <p class="product-brand">
+                                        <%= item.brand %>
+                                    </p>
+
+                                    <h2><%= item.name %></h2>
+
+                                    <p class="product-price">
+                                        $<%= item.price %>
+                                    </p>
+
+                                    <% if (item.stock_quantity === 0) { %>
+
+                                        <p class="stock-badge out-of-stock">
+                                            Out of Stock
+                                        </p>
+
+                                    <% } else if (item.stock_quantity <= 5) { %>
+
+                                        <p class="stock-badge low-stock">
+                                            Only <%= item.stock_quantity %> left
+                                        </p>
+
+                                    <% } else { %>
+
+                                        <p class="stock-badge in-stock">
+                                            In Stock
+                                        </p>
+
+                                    <% } %>
+
+                                </div>
+                            </article>
+
+                        </a>
+
+                    <% }) %>
+
+                </div>
+
+            <% } %>
+
+            <% if (totalPages > 1) { %>
+
+                <nav class="pagination" aria-label="Product pages">
+
+                    <% if (page > 1) { %>
+                        <a href="?page=<%= page - 1 %>&sort=<%= sortBy %>&stock=<%= stockFilter %>">
+                            Previous
+                        </a>
+                    <% } %>
+
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                        <a
+                            href="?page=<%= i %>&sort=<%= sortBy %>&stock=<%= stockFilter %>"
+                            class="<%= page === i ? 'active' : '' %>">
+                            <%= i %>
+                        </a>
+                    <% } %>
+
+                    <% if (page < totalPages) { %>
+                        <a href="?page=<%= page + 1 %>&sort=<%= sortBy %>&stock=<%= stockFilter %>">
+                            Next
+                        </a>
+                    <% } %>
+
+                </nav>
+
+            <% } %>
+
+        </section>
+
+    </main>
+</body>
+</html>

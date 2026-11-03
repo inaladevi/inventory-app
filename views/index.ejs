@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS TECH | Discover Technology</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <%- include("partials/navbar") %>
+
+  <main class="store-home">
+
+    <section class="store-hero">
+      <div class="hero-content">
+        <span class="hero-eyebrow">
+          <span class="hero-dot"></span>
+          THE FUTURE OF TECHNOLOGY
+        </span>
+
+        <h1>
+          Technology that<br>
+          moves you <span>forward.</span>
+        </h1>
+
+        <p>
+          Discover the latest in computing, mobile devices and
+          everyday technology. Explore our curated collections.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#categories" class="hero-primary-button">
+            Explore Collections <span>→</span>
+          </a>
+
+          <a href="/dashboard" class="hero-secondary-button">
+            Inventory Dashboard
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-glow"></div>
+        <div class="hero-orbit orbit-one"></div>
+        <div class="hero-orbit orbit-two"></div>
+
+        <div class="hero-visual-content">
+          <span class="hero-visual-label">NEXUS TECH</span>
+          <div class="hero-symbol">N</div>
+          <span class="hero-visual-caption">
+            INNOVATION WITHOUT LIMITS
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <section class="home-categories" id="categories">
+
+      <div class="home-section-heading">
+        <div>
+          <span class="section-eyebrow">EXPLORE THE STORE</span>
+          <h2>Browse collections<span>.</span></h2>
+          <p>Find the technology that fits your world.</p>
+        </div>
+
+        <a href="/categories/new" class="home-add-category">
+          + Add Category
+        </a>
+      </div>
+
+      <div class="category-grid">
+        <% categories.forEach((category, index) => { %>
+          <a href="/categories/<%= category.id %>" class="category-card">
+
+            <div class="category-card-top">
+              <span class="category-number">
+                <%= String(index + 1).padStart(2, "0") %>
+              </span>
+              <span class="category-arrow">↗</span>
+            </div>
+
+            <div class="category-card-decoration">
+              <div class="category-decoration-ring"></div>
+              <div class="category-decoration-core"></div>
+            </div>
+
+            <div class="category-card-content">
+              <h3><%= category.name %></h3>
+              <p><%= category.description || "Explore this collection." %></p>
+              <span class="category-explore">
+                Explore collection →
+              </span>
+            </div>
+
+          </a>
+        <% }) %>
+      </div>
+
+      <% if (categories.length === 0) { %>
+        <p class="empty-message">No collections available yet.</p>
+      <% } %>
+
+    </section>
+
+    <footer class="store-footer">
+      <a href="/" class="footer-brand">
+        NEXUS<span>TECH</span>
+      </a>
+      <p>Technology for what comes next.</p>
+    </footer>
+
+  </main>
+</body>
+</html>

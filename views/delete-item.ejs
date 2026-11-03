@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delete Product | Electronics Store</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+  <main class="delete-container">
+    <h1>Delete Product</h1>
+
+    <% if (typeof errorMessage !== "undefined" && errorMessage) { %>
+      <p class="error-message"><%= errorMessage %></p>
+    <% } %>
+
+    <p>
+      Are you sure you want to delete
+      <strong><%= item.name %></strong>?
+    </p>
+
+    <p class="delete-warning">
+      This action cannot be undone.
+    </p>
+
+    <form action="/items/<%= item.id %>/delete" method="POST">
+      <div class="form-group">
+        <label for="adminPassword">Admin Password</label>
+        <input
+          type="password"
+          id="adminPassword"
+          name="adminPassword"
+          placeholder="Enter admin password"
+          required
+          autocomplete="current-password"
+        >
+      </div>
+
+      <button type="submit" class="delete-button">
+        Yes, Delete Product
+      </button>
+    </form>
+
+    <a href="/items/<%= item.id %>" class="cancel-link">
+      Cancel
+    </a>
+  </main>
+
+</body>
+</html>

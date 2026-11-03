@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Results | Electronics Store</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+  <%- include("partials/navbar") %>
+
+  <main class="search-page">
+    <h1>Search Results</h1>
+
+    <p class="search-description">
+      Results for "<%= searchTerm %>"
+    </p>
+
+    <% if (items.length === 0) { %>
+
+      <p class="empty-message">
+        No products found. Try another search.
+      </p>
+
+    <% } else { %>
+
+      <p class="results-count">
+        <%= items.length %> products found
+      </p>
+
+      <div class="product-grid">
+        <% items.forEach(item => { %>
+
+          <a href="/items/<%= item.id %>" class="product-card">
+
+            <img
+              src="<%= item.image_url || '/placeholder.png' %>"
+              alt="<%= item.name %>"
+            >
+
+            <div class="product-info">
+              <p class="product-brand"><%= item.brand || "Unknown brand" %></p>
+
+              <h2><%= item.name %></h2>
+
+              <p class="product-price">$<%= item.price %></p>
+
+              <p class="product-stock">
+                <%= item.stock_quantity %> in stock
+              </p>
+            </div>
+
+          </a>
+
+        <% }) %>
+      </div>
+
+    <% } %>
+  </main>
+
+</body>
+</html>
