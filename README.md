@@ -2,6 +2,10 @@
 
 A web-based electronics inventory application built with Express, EJS, and PostgreSQL. It provides a storefront for browsing products and an inventory dashboard for managing products, categories, and stock.
 
+## Live Demo
+
+🔗 [Click here to view the live app](https://inventory-app-vssf.onrender.com)
+
 ## Features
 
 - Browse products by category and search by product name or brand
