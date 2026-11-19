@@ -48,7 +48,7 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.get("/", async (req, res) => {
   const categories = await getAllCategories();
