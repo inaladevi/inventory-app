@@ -70,15 +70,13 @@ A web-based electronics inventory application built with Express, EJS, and Postg
    );
    ```
 
-4. Update the PostgreSQL connection settings in `db/pool.js` to match your local setup.
-
-5. Create a `.env` file in the project root and set an admin password:
+4. Create a `.env` file in the project root based on `.env.example`, and set `DATABASE_URL` to your PostgreSQL connection string. For example:
 
    ```env
-   ADMIN_PASSWORD=your-admin-password
+   DATABASE_URL=postgresql://username:password@localhost:5432/inventory_db
    ```
 
-   This password is requested when editing or deleting products and categories.
+5. Set `ADMIN_PASSWORD` in `.env` to an admin password. This password is requested when editing or deleting products and categories.
 
 6. Optionally import sample categories and products from DummyJSON:
 
